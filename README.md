@@ -192,19 +192,9 @@ rm ~/.claude/scripts/kill-voice.sh
 
 ---
 
-## ライセンスと免責事項
+## ライセンス
 
-このソフトウェアは**MITライセンス**の下で提供されています。詳細は[LICENSE](LICENSE)ファイルをご覧ください。
-
-### 免責事項（Disclaimer）
-
-**日本語:**
-
-本ソフトウェアは「現状のまま」で提供され、明示的または黙示的を問わず、いかなる保証もありません。本ソフトウェアの使用によって生じたいかなる損害についても、作者または著作権者は一切の責任を負いません。
-
-**English:**
-
-This software is provided "as is", without warranty of any kind, express or implied. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software.
+MIT License - 詳細は[LICENSE](LICENSE)ファイルをご覧ください。
 
 ---
 

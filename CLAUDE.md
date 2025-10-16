@@ -110,8 +110,7 @@ chmod +x ~/.claude/scripts/kill-voice.sh
 ├── docs/                    # ドキュメント
 │   └── INDEX.md             # ドキュメント索引
 ├── CLAUDE.md                # このファイル
-├── README.md                # ユーザー向け説明
-└── HANDOFF.md               # 作業引き継ぎ
+└── README.md                # ユーザー向け説明
 ```
 
 ---
@@ -135,7 +134,7 @@ chmod +x ~/.claude/scripts/kill-voice.sh
 
 1. **このファイル** (`CLAUDE.md`)
 2. **`docs/INDEX.md`** - ドキュメント索引
-3. **`HANDOFF.md`** - 前回の作業引き継ぎ
+3. **`README.md`** - ユーザー向け説明
 
 ### STEP 2: 現在の状況確認
 
@@ -219,7 +218,6 @@ cat ~/.claude/settings.json
 
 - **[README.md](README.md)** - CVIの使い方
 - **[docs/INDEX.md](docs/INDEX.md)** - ドキュメント索引
-- **[HANDOFF.md](HANDOFF.md)** - 作業引き継ぎ
 
 ---
 

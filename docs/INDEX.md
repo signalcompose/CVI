@@ -14,7 +14,6 @@
 |------------|------|---------|
 | [../README.md](../README.md) | CVIの概要と使い方 | 全員 |
 | [../CLAUDE.md](../CLAUDE.md) | Claude Code向け指示書 | AI開発者 |
-| [../HANDOFF.md](../HANDOFF.md) | 作業引き継ぎドキュメント | AI開発者 |
 
 ---
 
@@ -28,8 +27,7 @@
 
 ### Claude Codeで開発する場合
 
-1. **[CLAUDE.md](../CLAUDE.md)** - セッション開始時の手順
-2. **[HANDOFF.md](../HANDOFF.md)** - 前回の作業内容と次のタスク
+1. **[CLAUDE.md](../CLAUDE.md)** - セッション開始時の手順とプロジェクト仕様
 
 ---
 
@@ -45,11 +43,6 @@
 - **対象**: AI開発者（Claude Code）
 - **含まれる内容**: セッション開始手順、技術仕様、開発原則
 
-### HANDOFF.md
-- **目的**: 作業の引き継ぎを円滑にする
-- **対象**: AI開発者（Claude Code）
-- **含まれる内容**: 今回実施したこと、現在の状況、次のタスク
-
 ---
 
 ## 🔄 ドキュメント更新ルール
@@ -58,12 +51,10 @@
 
 - **README.md**: 使い方が変わった時、FAQが増えた時
 - **CLAUDE.md**: CVIの機能が追加された時、ルールが変更された時
-- **HANDOFF.md**: 各Claude Codeセッション終了時
 
 ### 誰が更新するか
 
-- **HANDOFF.md**: Claude Codeが各セッション終了時に更新
-- **README.md, CLAUDE.md**: 必要に応じて手動で編集
+- **README.md, CLAUDE.md**: 必要に応じて手動またはClaude Codeで編集
 
 ---
 
@@ -99,7 +90,6 @@
 - **インストールの疑問**: [README.md](../README.md)のインストールセクションを確認
 - **使い方の疑問**: [README.md](../README.md)の使い方セクションを確認
 - **開発の疑問**: [CLAUDE.md](../CLAUDE.md)の開発原則を確認
-- **引き継ぎの疑問**: [HANDOFF.md](../HANDOFF.md)を参照
 
 ---
 

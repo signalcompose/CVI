@@ -43,3 +43,6 @@ logs/
 
 # Claude Code local settings (personal settings - not shared)
 .claude/settings.local.json
+
+# Temporary handoff documents (project-specific work notes)
+HANDOFF.md

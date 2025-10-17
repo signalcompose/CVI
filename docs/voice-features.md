@@ -56,54 +56,28 @@ Claude Codeは`[VOICE]...[/VOICE]`タグを使って、読み上げ用の簡潔�
 
 ### セットアップ手順
 
-#### 1. スクリプトをコピー
+#### 簡単セットアップ（推奨）
 
 ```bash
 # CVIリポジトリから
-cp scripts/notify-end.sh ~/.claude/scripts/
-cp scripts/kill-voice.sh ~/.claude/scripts/
+cd /path/to/CVI
 
-# 実行権限を付与
-chmod +x ~/.claude/scripts/notify-end.sh
-chmod +x ~/.claude/scripts/kill-voice.sh
+# グローバルインストール（全プロジェクトで有効）
+scripts/cvi-setup global
+
+# または、プロジェクトローカル（現在のプロジェクトのみ）
+scripts/cvi-setup project
 ```
 
-#### 2. hooks設定
+これで以下が自動的に実行されます：
+- スクリプトのコピーと権限設定
+- hooks設定の追加
+- 初期設定（速度、言語）
+- Siri音声設定の確認
 
-`~/.claude/settings.json`を編集（または作成）：
+#### 手動セットアップ
 
-```json
-{
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/scripts/kill-voice.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/scripts/notify-end.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-#### 3. Claude Codeを再起動
-
-設定を反映させるため、Claude Codeを再起動してください。
+詳細は[README.md](../README.md#手動インストール)を参照してください。
 
 ---
 

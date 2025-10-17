@@ -3,6 +3,18 @@
 # Read hook input from stdin
 INPUT=$(cat)
 
+# Check if CVI is enabled
+CONFIG_FILE="$HOME/.cvi/config"
+if [ -f "$CONFIG_FILE" ]; then
+    CVI_ENABLED=$(grep "^CVI_ENABLED=" "$CONFIG_FILE" | cut -d'=' -f2)
+fi
+CVI_ENABLED=${CVI_ENABLED:-on}
+
+# Exit early if disabled
+if [ "$CVI_ENABLED" = "off" ]; then
+    exit 0
+fi
+
 # Get current session directory name
 SESSION_DIR=$(basename "$(pwd)")
 
@@ -24,10 +36,26 @@ if [ -f "$TRANSCRIPT_PATH" ]; then
         MSG=$(echo "$FULL_MSG" | tr '\n' ' ' | cut -c1-200)
     fi
 
-    # Fallback message if no message found
-    MSG=${MSG:-"Task completed"}
+    # Fallback message if no message found (language-aware)
+    if [ -z "$MSG" ]; then
+        # Load language setting
+        VOICE_LANG=$(grep "^VOICE_LANG=" "$HOME/.cvi/config" 2>/dev/null | cut -d'=' -f2)
+        VOICE_LANG=${VOICE_LANG:-ja}
+        if [ "$VOICE_LANG" = "en" ]; then
+            MSG="Task completed"
+        else
+            MSG="タスクが完了しました"
+        fi
+    fi
 else
-    MSG="Task completed"
+    # Load language setting
+    VOICE_LANG=$(grep "^VOICE_LANG=" "$HOME/.cvi/config" 2>/dev/null | cut -d'=' -f2)
+    VOICE_LANG=${VOICE_LANG:-ja}
+    if [ "$VOICE_LANG" = "en" ]; then
+        MSG="Task completed"
+    else
+        MSG="タスクが完了しました"
+    fi
 fi
 
 # Display macOS notification

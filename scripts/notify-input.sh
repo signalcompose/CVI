@@ -23,9 +23,11 @@ CONFIG_FILE="$HOME/.cvi/config"
 if [ -f "$CONFIG_FILE" ]; then
     SPEECH_RATE=$(grep "^SPEECH_RATE=" "$CONFIG_FILE" | cut -d'=' -f2)
     VOICE_LANG=$(grep "^VOICE_LANG=" "$CONFIG_FILE" | cut -d'=' -f2)
+    VOICE_EN=$(grep "^VOICE_EN=" "$CONFIG_FILE" | cut -d'=' -f2)
 fi
 SPEECH_RATE=${SPEECH_RATE:-200}
 VOICE_LANG=${VOICE_LANG:-ja}
+VOICE_EN=${VOICE_EN:-Samantha}
 
 # Set message based on language
 if [ "$VOICE_LANG" = "en" ]; then
@@ -36,8 +38,8 @@ fi
 
 # Select voice based on language setting
 if [ "$VOICE_LANG" = "en" ]; then
-    # Use Samantha for English (standard macOS English voice)
-    say -v Samantha -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+    # Use configured English voice (default: Samantha)
+    say -v "$VOICE_EN" -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
 else
     # Use system default voice (Siri Japanese if configured in System Settings)
     say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"

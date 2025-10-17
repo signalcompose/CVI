@@ -1,0 +1,151 @@
+#!/bin/bash
+
+# CVI - Claude Voice Integration
+# Voice selection command for English
+
+CONFIG_FILE="$HOME/.cvi/config"
+
+# Ensure config directory exists
+mkdir -p "$(dirname "$CONFIG_FILE")"
+
+# Create config file if it doesn't exist
+if [ ! -f "$CONFIG_FILE" ]; then
+    cat > "$CONFIG_FILE" <<EOF
+CVI_ENABLED=on
+SPEECH_RATE=200
+VOICE_LANG=ja
+VOICE_EN=Samantha
+EOF
+fi
+
+# Show usage
+usage() {
+    cat <<EOF
+CVI - Voice Selection for English
+
+Usage:
+  cvi-voice                Show current English voice
+  cvi-voice [VOICE]        Set English voice
+  cvi-voice list           List available English voices
+  cvi-voice reset          Reset to default (Samantha)
+
+Popular English Voices:
+  Samantha      US English (Female) - Default, natural and clear
+  Karen         Australian English (Female) - Clear and pleasant
+  Daniel        UK English (Male) - British accent
+  Moira         Irish English (Female) - Irish accent
+  Tessa         South African English (Female) - Unique accent
+  Fred          US English (Male) - Classic male voice
+
+Examples:
+  cvi-voice                # Show current voice
+  cvi-voice Samantha       # Set to Samantha (US Female)
+  cvi-voice Karen          # Set to Karen (AU Female)
+  cvi-voice Daniel         # Set to Daniel (UK Male)
+  cvi-voice list           # Show all available voices
+  cvi-voice reset          # Reset to Samantha
+
+Note: This setting only affects English (cvi-lang en) mode.
+      Japanese mode uses the system default voice (Siri).
+EOF
+}
+
+# List all available English voices
+list_voices() {
+    echo "Available English Voices:"
+    echo ""
+    echo "🇺🇸 US English:"
+    say -v '?' | grep 'en_US' | grep -E '(Samantha|Fred|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)' | sed 's/^/  /'
+    echo ""
+    echo "🇬🇧 UK English:"
+    say -v '?' | grep 'en_GB' | grep -E '(Daniel|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)' | sed 's/^/  /'
+    echo ""
+    echo "🇦🇺 Australian English:"
+    say -v '?' | grep 'en_AU' | sed 's/^/  /'
+    echo ""
+    echo "🇮🇪 Irish English:"
+    say -v '?' | grep 'en_IE' | sed 's/^/  /'
+    echo ""
+    echo "🇿🇦 South African English:"
+    say -v '?' | grep 'en_ZA' | sed 's/^/  /'
+    echo ""
+    echo "🇮🇳 Indian English:"
+    say -v '?' | grep 'en_IN' | sed 's/^/  /'
+    echo ""
+    echo "Use 'cvi-voice [NAME]' to set a voice (e.g., cvi-voice Karen)"
+}
+
+# Show current voice
+show_current() {
+    local current_voice=$(grep "^VOICE_EN=" "$CONFIG_FILE" 2>/dev/null | cut -d'=' -f2)
+    current_voice=${current_voice:-Samantha}
+
+    echo "Current English voice: $current_voice"
+
+    # Get voice details
+    local voice_info=$(say -v '?' | grep "^$current_voice " | head -1)
+    if [ -n "$voice_info" ]; then
+        echo "Details: $voice_info"
+    fi
+}
+
+# Set voice
+set_voice() {
+    local voice=$1
+
+    # Check if voice exists
+    if ! say -v '?' | grep -q "^$voice "; then
+        echo "Error: Voice '$voice' not found"
+        echo ""
+        echo "Use 'cvi-voice list' to see available voices"
+        exit 1
+    fi
+
+    # Check if it's an English voice
+    if ! say -v '?' | grep "^$voice " | grep -q "en_"; then
+        echo "Error: '$voice' is not an English voice"
+        echo ""
+        echo "Use 'cvi-voice list' to see English voices only"
+        exit 1
+    fi
+
+    # Update config
+    if grep -q "^VOICE_EN=" "$CONFIG_FILE"; then
+        sed -i '' "s/^VOICE_EN=.*/VOICE_EN=$voice/" "$CONFIG_FILE"
+    else
+        echo "VOICE_EN=$voice" >> "$CONFIG_FILE"
+    fi
+
+    echo "✅ English voice set to: $voice"
+    echo ""
+    echo "Testing with sample message..."
+    say -v "$voice" "Hello, this is $voice speaking. Voice settings updated successfully."
+}
+
+# Reset to default
+reset_voice() {
+    sed -i '' "s/^VOICE_EN=.*/VOICE_EN=Samantha/" "$CONFIG_FILE"
+    echo "✅ English voice reset to default: Samantha"
+    echo ""
+    echo "Testing with sample message..."
+    say -v Samantha "Voice reset to Samantha. This is the default English voice."
+}
+
+# Main
+case "$1" in
+    "")
+        show_current
+        ;;
+    list)
+        list_voices
+        ;;
+    reset)
+        reset_voice
+        ;;
+    help|--help|-h)
+        usage
+        ;;
+    *)
+        set_voice "$1"
+        ;;
+esac

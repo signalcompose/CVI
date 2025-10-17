@@ -85,6 +85,10 @@ if [ -f "$CONFIG_FILE" ]; then
             ;;
         en)
             echo "✅ 言語設定: English"
+            # Show English voice setting
+            VOICE_EN=$(grep "^VOICE_EN=" "$CONFIG_FILE" | cut -d'=' -f2)
+            VOICE_EN=${VOICE_EN:-Samantha}
+            echo "✅ 英語音声: $VOICE_EN"
             ;;
         *)
             echo "⚠️  言語設定: $VOICE_LANG (不明)"

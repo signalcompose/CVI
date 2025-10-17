@@ -174,9 +174,29 @@ cvi-lang reset     # デフォルト（ja）に戻す
 
 音声選択：
 - **日本語（ja）**: システムデフォルト音声（Siri日本語を推奨）
-- **英語（en）**: Samantha（macOS標準英語音声）
+- **英語（en）**: 設定された英語音声（デフォルト: Samantha）
 
 注意: [VOICE]タグ内のテキストは言語設定に関わらずそのまま読み上げられます。
+
+#### cvi-voice - 英語音声の選択
+
+```bash
+cvi-voice           # 現在の英語音声を確認
+cvi-voice Samantha  # Samanthaに設定（US英語、女性）
+cvi-voice Karen     # Karenに設定（AU英語、女性）
+cvi-voice Daniel    # Danielに設定（UK英語、男性）
+cvi-voice list      # 利用可能な英語音声一覧
+cvi-voice reset     # デフォルト（Samantha）に戻す
+```
+
+人気の英語音声：
+- **Samantha** (US): 標準的でクリアな女性の声（デフォルト）
+- **Karen** (AU): オーストラリア英語、聞き取りやすい女性の声
+- **Daniel** (UK): イギリス英語、男性の声
+- **Moira** (IE): アイルランド英語、女性の声
+- **Fred** (US): 古典的な男性の声
+
+注意: この設定は英語モード（`cvi-lang en`）の時のみ有効です。
 
 #### cvi-check - セットアップ診断
 

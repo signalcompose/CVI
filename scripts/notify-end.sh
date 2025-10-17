@@ -39,13 +39,15 @@ afplay -v 1.0 /System/Library/Sounds/Glass.aiff &
 # Read message aloud with volume control (60% = 0.6)
 TEMP_AUDIO="/tmp/claude_notify_$$.aiff"
 
-if echo "$MSG" | grep -q '[ぁ-んァ-ヶ一-龥]'; then
-    # Japanese message - use Kyoko voice
-    say -v Kyoko -o "$TEMP_AUDIO" "$MSG"
-else
-    # English message - use default voice
-    say -o "$TEMP_AUDIO" "$MSG"
+# Load speech rate from config (default: 200)
+CONFIG_FILE="$HOME/.cvi/config"
+if [ -f "$CONFIG_FILE" ]; then
+    SPEECH_RATE=$(grep "^SPEECH_RATE=" "$CONFIG_FILE" | cut -d'=' -f2)
 fi
+SPEECH_RATE=${SPEECH_RATE:-200}
+
+# Use system default voice (Siri if configured in System Settings)
+say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
 
 # === 完全に独立したバックグラウンド実行 ===
 # 音声再生とクリーンアップを独立したプロセスとして実行

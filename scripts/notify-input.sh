@@ -34,8 +34,14 @@ else
     MSG="確認をお願いします"
 fi
 
-# Use system default voice (Siri if configured in System Settings)
-say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+# Select voice based on language setting
+if [ "$VOICE_LANG" = "en" ]; then
+    # Use Samantha for English (standard macOS English voice)
+    say -v Samantha -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+else
+    # Use system default voice (Siri Japanese if configured in System Settings)
+    say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+fi
 
 # Play with 60% volume and cleanup in background
 (afplay -v 0.6 "$TEMP_AUDIO" && rm -f "$TEMP_AUDIO") &

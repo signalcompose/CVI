@@ -26,11 +26,13 @@ CVI - Voice Selection for English
 Usage:
   cvi-voice                Show current English voice
   cvi-voice [VOICE]        Set English voice
+  cvi-voice system         Use system default voice (English Siri)
   cvi-voice list           List available English voices
   cvi-voice reset          Reset to default (Samantha)
 
 Popular English Voices:
-  Samantha      US English (Female) - Default, natural and clear
+  system        System default (English Siri if configured)
+  Samantha      US English (Female) - Natural and clear
   Karen         Australian English (Female) - Clear and pleasant
   Daniel        UK English (Male) - British accent
   Moira         Irish English (Female) - Irish accent
@@ -39,6 +41,7 @@ Popular English Voices:
 
 Examples:
   cvi-voice                # Show current voice
+  cvi-voice system         # Use system default (English Siri)
   cvi-voice Samantha       # Set to Samantha (US Female)
   cvi-voice Karen          # Set to Karen (AU Female)
   cvi-voice Daniel         # Set to Daniel (UK Male)
@@ -46,7 +49,7 @@ Examples:
   cvi-voice reset          # Reset to Samantha
 
 Note: This setting only affects English (cvi-lang en) mode.
-      Japanese mode uses the system default voice (Siri).
+      Japanese mode always uses the system default voice (Japanese Siri).
 EOF
 }
 
@@ -92,6 +95,25 @@ show_current() {
 # Set voice
 set_voice() {
     local voice=$1
+
+    # Special handling for 'system'
+    if [ "$voice" = "system" ]; then
+        # Update config to use system default
+        if grep -q "^VOICE_EN=" "$CONFIG_FILE"; then
+            sed -i '' "s/^VOICE_EN=.*/VOICE_EN=system/" "$CONFIG_FILE"
+        else
+            echo "VOICE_EN=system" >> "$CONFIG_FILE"
+        fi
+
+        echo "✅ English voice set to: system default"
+        echo ""
+        echo "This will use the system default English voice (English Siri if configured)."
+        echo "Configure it in: System Settings > Accessibility > Spoken Content > System Voice > English"
+        echo ""
+        echo "Testing with sample message..."
+        say "Hello. Using system default English voice. Voice settings updated successfully."
+        return
+    fi
 
     # Check if voice exists
     if ! say -v '?' | grep -q "^$voice "; then

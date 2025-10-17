@@ -78,12 +78,18 @@ SPEECH_RATE=${SPEECH_RATE:-200}
 VOICE_LANG=${VOICE_LANG:-ja}
 VOICE_EN=${VOICE_EN:-Samantha}
 
-# Select voice based on language setting
+# Select voice based on language and voice settings
 if [ "$VOICE_LANG" = "en" ]; then
-    # Use configured English voice (default: Samantha)
-    say -v "$VOICE_EN" -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+    # English: Use configured voice
+    if [ "$VOICE_EN" = "system" ]; then
+        # Use system default (no -v flag)
+        say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+    else
+        # Use specific English voice
+        say -v "$VOICE_EN" -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+    fi
 else
-    # Use system default voice (Siri Japanese if configured in System Settings)
+    # Japanese or fallback: Always use system default
     say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
 fi
 

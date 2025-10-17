@@ -28,7 +28,10 @@ Examples:
   cvi-lang en           Set to English
   cvi-lang              Show current setting
 
-Note: Siri voice supports both Japanese and English with natural pronunciation.
+Notes:
+  - Language setting affects fallback messages
+  - Actual voice is controlled by 'cvi-voice' command
+  - Use 'cvi-voice system' to use OS language-specific Siri voices
 EOF
 }
 
@@ -78,13 +81,24 @@ set_lang() {
             ;;
     esac
 
-    # Load speech rate from config
+    # Load speech rate and voice from config
     SPEECH_RATE=$(grep "^SPEECH_RATE=" "$CONFIG_FILE" 2>/dev/null | cut -d'=' -f2)
     SPEECH_RATE=${SPEECH_RATE:-200}
 
-    # Test with sample
+    VOICE_EN=$(grep "^VOICE_EN=" "$CONFIG_FILE" 2>/dev/null | cut -d'=' -f2)
+    VOICE_EN=${VOICE_EN:-Samantha}
+
+    # Test with sample (use configured voice)
     echo "Testing with sample message..."
-    say -r "$SPEECH_RATE" "$test_msg"
+    if [ "$lang" = "en" ]; then
+        if [ "$VOICE_EN" = "system" ]; then
+            say -r "$SPEECH_RATE" "$test_msg"
+        else
+            say -v "$VOICE_EN" -r "$SPEECH_RATE" "$test_msg"
+        fi
+    else
+        say -r "$SPEECH_RATE" "$test_msg"
+    fi
 }
 
 # Main

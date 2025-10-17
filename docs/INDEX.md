@@ -14,6 +14,7 @@
 |------------|------|---------|
 | [../README.md](../README.md) | CVIの概要と使い方 | 全員 |
 | [../CLAUDE.md](../CLAUDE.md) | Claude Code向け指示書 | AI開発者 |
+| [voice-features.md](voice-features.md) | 音声機能の詳細ガイド | 開発者・カスタマイズユーザー |
 
 ---
 
@@ -24,6 +25,10 @@
 1. **[README.md](../README.md)** - CVIとは何か、インストール方法
 2. **インストール実行** - スクリプトとhooksの設定
 3. **動作確認** - Claude Codeでテスト
+
+### カスタマイズする場合
+
+1. **[voice-features.md](voice-features.md)** - [VOICE]タグの使い方、音量調整、音声変更
 
 ### Claude Codeで開発する場合
 
@@ -43,6 +48,11 @@
 - **対象**: AI開発者（Claude Code）
 - **含まれる内容**: セッション開始手順、技術仕様、開発原則
 
+### voice-features.md
+- **目的**: 音声機能の詳細とカスタマイズ方法を説明する
+- **対象**: 開発者、カスタマイズユーザー
+- **含まれる内容**: [VOICE]タグの使い方、技術仕様、カスタマイズ方法
+
 ---
 
 ## 🔄 ドキュメント更新ルール
@@ -51,10 +61,11 @@
 
 - **README.md**: 使い方が変わった時、FAQが増えた時
 - **CLAUDE.md**: CVIの機能が追加された時、ルールが変更された時
+- **voice-features.md**: [VOICE]タグの仕様変更、カスタマイズ方法の追加時
 
 ### 誰が更新するか
 
-- **README.md, CLAUDE.md**: 必要に応じて手動またはClaude Codeで編集
+- **README.md, CLAUDE.md, voice-features.md**: 必要に応じて手動またはClaude Codeで編集
 
 ---
 

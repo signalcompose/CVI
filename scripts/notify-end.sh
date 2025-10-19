@@ -67,30 +67,58 @@ afplay -v 1.0 /System/Library/Sounds/Glass.aiff &
 # Read message aloud with volume control (60% = 0.6)
 TEMP_AUDIO="/tmp/claude_notify_$$.aiff"
 
-# Load speech rate from config (default: 200)
+# Load configuration from file
 CONFIG_FILE="$HOME/.cvi/config"
 if [ -f "$CONFIG_FILE" ]; then
     SPEECH_RATE=$(grep "^SPEECH_RATE=" "$CONFIG_FILE" | cut -d'=' -f2)
     VOICE_LANG=$(grep "^VOICE_LANG=" "$CONFIG_FILE" | cut -d'=' -f2)
     VOICE_EN=$(grep "^VOICE_EN=" "$CONFIG_FILE" | cut -d'=' -f2)
+    VOICE_JA=$(grep "^VOICE_JA=" "$CONFIG_FILE" | cut -d'=' -f2)
+    AUTO_DETECT_LANG=$(grep "^AUTO_DETECT_LANG=" "$CONFIG_FILE" | cut -d'=' -f2)
+    VOICE_MODE=$(grep "^VOICE_MODE=" "$CONFIG_FILE" | cut -d'=' -f2)
+    VOICE_FIXED=$(grep "^VOICE_FIXED=" "$CONFIG_FILE" | cut -d'=' -f2)
 fi
+
+# Set defaults
 SPEECH_RATE=${SPEECH_RATE:-200}
 VOICE_LANG=${VOICE_LANG:-ja}
 VOICE_EN=${VOICE_EN:-Samantha}
+VOICE_JA=${VOICE_JA:-system}
+AUTO_DETECT_LANG=${AUTO_DETECT_LANG:-false}
+VOICE_MODE=${VOICE_MODE:-auto}
 
-# Select voice based on language and voice settings
-if [ "$VOICE_LANG" = "en" ]; then
-    # English: Use configured voice
-    if [ "$VOICE_EN" = "system" ]; then
-        # Use system default (no -v flag)
-        say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+# Detect language if AUTO_DETECT_LANG is enabled
+if [ "$AUTO_DETECT_LANG" = "true" ]; then
+    if echo "$MSG" | grep -q '[ぁ-んァ-ヶー一-龠]'; then
+        DETECTED_LANG="ja"
     else
-        # Use specific English voice
-        say -v "$VOICE_EN" -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+        DETECTED_LANG="en"
     fi
 else
-    # Japanese or fallback: Always use system default
+    # Use configured language
+    DETECTED_LANG="$VOICE_LANG"
+fi
+
+# Select voice based on mode and detected language
+if [ "$VOICE_MODE" = "fixed" ] && [ -n "$VOICE_FIXED" ]; then
+    # Fixed mode: use specified voice for all languages
+    SELECTED_VOICE="$VOICE_FIXED"
+else
+    # Auto mode: select voice based on detected language
+    if [ "$DETECTED_LANG" = "ja" ]; then
+        SELECTED_VOICE="$VOICE_JA"
+    else
+        SELECTED_VOICE="$VOICE_EN"
+    fi
+fi
+
+# Generate audio with selected voice
+if [ "$SELECTED_VOICE" = "system" ]; then
+    # Use system default (no -v flag)
     say -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
+else
+    # Use specific voice
+    say -v "$SELECTED_VOICE" -r "$SPEECH_RATE" -o "$TEMP_AUDIO" "$MSG"
 fi
 
 # === 完全に独立したバックグラウンド実行 ===

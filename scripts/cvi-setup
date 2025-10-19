@@ -82,6 +82,8 @@ setup_global() {
     cp -v "$SCRIPT_DIR/cvi" "$HOME/.claude/scripts/"
     cp -v "$SCRIPT_DIR/cvi-speed" "$HOME/.claude/scripts/"
     cp -v "$SCRIPT_DIR/cvi-lang" "$HOME/.claude/scripts/"
+    cp -v "$SCRIPT_DIR/cvi-voice" "$HOME/.claude/scripts/"
+    cp -v "$SCRIPT_DIR/cvi-auto" "$HOME/.claude/scripts/"
     cp -v "$SCRIPT_DIR/cvi-check" "$HOME/.claude/scripts/"
 
     # Set executable permissions
@@ -92,6 +94,8 @@ setup_global() {
     chmod +x "$HOME/.claude/scripts/cvi"
     chmod +x "$HOME/.claude/scripts/cvi-speed"
     chmod +x "$HOME/.claude/scripts/cvi-lang"
+    chmod +x "$HOME/.claude/scripts/cvi-voice"
+    chmod +x "$HOME/.claude/scripts/cvi-auto"
     chmod +x "$HOME/.claude/scripts/cvi-check"
 
     # Setup hooks
@@ -106,6 +110,8 @@ setup_global() {
         cp -v "$PROJECT_ROOT/.claude/commands/cvi.md" "$HOME/.claude/commands/" 2>/dev/null || true
         cp -v "$PROJECT_ROOT/.claude/commands/cvi-speed.md" "$HOME/.claude/commands/" 2>/dev/null || true
         cp -v "$PROJECT_ROOT/.claude/commands/cvi-lang.md" "$HOME/.claude/commands/" 2>/dev/null || true
+        cp -v "$PROJECT_ROOT/.claude/commands/cvi-voice.md" "$HOME/.claude/commands/" 2>/dev/null || true
+        cp -v "$PROJECT_ROOT/.claude/commands/cvi-auto.md" "$HOME/.claude/commands/" 2>/dev/null || true
         cp -v "$PROJECT_ROOT/.claude/commands/cvi-check.md" "$HOME/.claude/commands/" 2>/dev/null || true
     fi
 
@@ -290,6 +296,10 @@ setup_config() {
 CVI_ENABLED=on
 SPEECH_RATE=200
 VOICE_LANG=ja
+VOICE_EN=Samantha
+VOICE_JA=system
+AUTO_DETECT_LANG=false
+VOICE_MODE=auto
 EOF
 
     echo -e "${GREEN}Created default configuration${NC}"
@@ -297,7 +307,11 @@ EOF
     echo "Default settings:"
     echo "  - Voice notifications: ENABLED"
     echo "  - Reading speed: 200 wpm"
-    echo "  - Language: Japanese"
+    echo "  - Fallback language: Japanese"
+    echo "  - English voice: Samantha"
+    echo "  - Japanese voice: System default"
+    echo "  - Voice mode: Auto (language-based)"
+    echo "  - Language auto-detection: OFF"
     echo ""
 
     # Ask if user wants to customize
@@ -367,8 +381,9 @@ main() {
             echo "  2. Check System Settings > Accessibility > Spoken Content"
             echo "     and set 'System voice' to 'Siri (Voice 2)' for best quality"
             echo "  3. Use 'cvi status' to check current settings"
-            echo "  4. Use 'cvi-speed' to adjust reading speed"
-            echo "  5. Use 'cvi-lang' to switch language"
+            echo "  4. Use 'cvi-voice' to set language-specific voices"
+            echo "  5. Use 'cvi-auto on' to enable automatic language detection"
+            echo "  6. Use 'cvi-speed' to adjust reading speed"
             echo ""
             ;;
         project)

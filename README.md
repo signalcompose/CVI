@@ -182,35 +182,69 @@ cvi-lang reset     # デフォルト（ja）に戻す
 - 英語モードでは`cvi-voice`で設定した音声を使用
 - [VOICE]タグ内のテキストは言語設定に関わらずそのまま読み上げられます
 
-#### cvi-voice - 音声の選択
+#### cvi-voice - 音声の選択（言語別設定）
 
 ```bash
-cvi-voice           # 現在の設定を確認
-cvi-voice system    # システムデフォルト音声を使用
-cvi-voice Samantha  # Samanthaに設定（US英語、女性）
-cvi-voice Karen     # Karenに設定（AU英語、女性）
-cvi-voice Daniel    # Danielに設定（UK英語、男性）
-cvi-voice list      # 利用可能な英語音声一覧
-cvi-voice reset     # デフォルト（Samantha）に戻す
+cvi-voice                    # 現在の設定を確認
+cvi-voice en Zoe             # 英語音声をZoeに設定
+cvi-voice ja Kyoko           # 日本語音声をKyokoに設定
+cvi-voice mode auto          # 自動音声選択モード（デフォルト）
+cvi-voice mode fixed         # 固定音声モード
+cvi-voice fixed Zoe          # 全言語でZoeを使用
+cvi-voice list               # 利用可能な音声一覧
+cvi-voice reset              # デフォルトに戻す
 ```
 
-**system オプション**:
-- システムのデフォルト音声を使用（Siri音声など）
-- システム設定で言語別の音声が設定されている場合に便利
-- 設定方法: **システム設定** > **アクセシビリティ** > **読み上げコンテンツ** > **システムの声**
+**言語別音声設定**:
+- **英語音声** (`cvi-voice en [VOICE]`): 英語テキスト用の音声
+- **日本語音声** (`cvi-voice ja [VOICE]`): 日本語テキスト用の音声
+- 各言語で異なる音声を設定できます
 
-**人気の英語音声**:
-- **Samantha** (US): 標準的でクリアな女性の声（デフォルト）
-- **Karen** (AU): オーストラリア英語、聞き取りやすい女性の声
-- **Daniel** (UK): イギリス英語、男性の声
-- **Moira** (IE): アイルランド英語、女性の声
-- **Fred** (US): 古典的な男性の声
+**音声モード**:
+- **autoモード** (デフォルト): 言語に応じて自動的に音声を切り替え
+- **fixedモード**: 全ての言語で同じ音声を使用
 
-**使い分けの例**:
-- **英語圏のユーザー**: `cvi-lang en` + `cvi-voice system` でシステムのSiri音声を使用
-- **日本語環境で英語読み上げ**: `cvi-lang en` + `cvi-voice Samantha` など特定の音声を指定
+**人気の音声**:
 
-注意: `cvi-voice`の設定は英語モード（`cvi-lang en`）の時のみ有効です。日本語モードでは常にシステムデフォルト音声を使用します。
+*日本語*:
+- **system**: システムデフォルト（日本語Siri）
+- **Kyoko**: 標準日本語音声（女性）
+- **Otoya**: 標準日本語音声（男性）
+
+*英語*:
+- **system**: システムデフォルト（英語Siri）
+- **Samantha** (US): 標準的でクリアな女性の声
+- **Zoe** (UK): プレミアム女性音声
+- **Karen** (AU): オーストラリア英語、女性
+- **Daniel** (UK): イギリス英語、男性
+
+#### cvi-auto - 言語自動検出
+
+```bash
+cvi-auto           # 現在の設定を確認
+cvi-auto on        # 言語自動検出を有効化
+cvi-auto off       # 言語自動検出を無効化（デフォルト）
+cvi-auto status    # 詳細ステータス表示
+```
+
+**言語自動検出**:
+- [VOICE]タグ内のテキストを分析し、日本語/英語を自動判定
+- 日本語検出時 → 日本語音声を使用
+- 英語検出時 → 英語音声を使用
+- 設定言語に関わらず、適切な音声で読み上げ
+
+**使用例**:
+```bash
+# 日本語環境で英語学習
+cvi-lang ja            # フォールバックは日本語
+cvi-voice ja system    # 日本語はシステム音声
+cvi-voice en Zoe       # 英語はZoe（学習用）
+cvi-auto on            # 自動検出ON
+
+# 動作
+[VOICE]Task completed[/VOICE]  # Zoeで英語読み上げ
+[VOICE]完了しました[/VOICE]      # システム音声で日本語
+```
 
 #### cvi-check - セットアップ診断
 

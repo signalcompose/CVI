@@ -56,54 +56,28 @@ Claude Codeは`[VOICE]...[/VOICE]`タグを使って、読み上げ用の簡潔�
 
 ### セットアップ手順
 
-#### 1. スクリプトをコピー
+#### 簡単セットアップ（推奨）
 
 ```bash
 # CVIリポジトリから
-cp scripts/notify-end.sh ~/.claude/scripts/
-cp scripts/kill-voice.sh ~/.claude/scripts/
+cd /path/to/CVI
 
-# 実行権限を付与
-chmod +x ~/.claude/scripts/notify-end.sh
-chmod +x ~/.claude/scripts/kill-voice.sh
+# グローバルインストール（全プロジェクトで有効）
+scripts/cvi-setup global
+
+# または、プロジェクトローカル（現在のプロジェクトのみ）
+scripts/cvi-setup project
 ```
 
-#### 2. hooks設定
+これで以下が自動的に実行されます：
+- スクリプトのコピーと権限設定
+- hooks設定の追加
+- 初期設定（速度、言語）
+- Siri音声設定の確認
 
-`~/.claude/settings.json`を編集（または作成）：
+#### 手動セットアップ
 
-```json
-{
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/scripts/kill-voice.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/scripts/notify-end.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-#### 3. Claude Codeを再起動
-
-設定を反映させるため、Claude Codeを再起動してください。
+詳細は[README.md](../README.md#手動インストール)を参照してください。
 
 ---
 
@@ -135,6 +109,144 @@ README.mdにインストール手順を追加しました。以下の内容を�
 
 ## カスタマイズ
 
+### 読み上げ速度の変更
+
+**`cvi-speed`コマンド**で簡単に速度を変更できます：
+
+```bash
+# 現在の速度を確認
+scripts/cvi-speed
+
+# 速度を変更（90-350 wpm）
+scripts/cvi-speed 220    # 速め
+scripts/cvi-speed 200    # 標準（デフォルト）
+scripts/cvi-speed 180    # ゆっくり
+
+# デフォルトに戻す
+scripts/cvi-speed reset
+```
+
+**推奨速度**:
+- **180 wpm**: ゆっくり、聞き取りやすい
+- **200 wpm**: 標準速度（デフォルト）
+- **220 wpm**: やや速め、効率的
+
+設定は`~/.cvi/config`に保存され、次回のタスク完了時から適用されます。
+
+---
+
+### 音声の変更（Siri音声の使用）
+
+**システム設定でSiri音声を選択**すると、より自然で流暢な読み上げになります：
+
+1. **システム設定** > **アクセシビリティ** > **読み上げコンテンツ**
+2. **システムの声**で「Siri (声2)」または「Eloquence」を選択
+3. CVIは自動的にシステムデフォルト音声を使用
+
+**確認方法**：
+```bash
+# システムデフォルト音声でテスト
+say "これはテストメッセージです"
+```
+
+Siri音声で読み上げられれば、CVIでも同じ音声が使われます。
+
+---
+
+### 言語切り替え
+
+**`cvi-lang`コマンド**でフォールバックメッセージの言語を切り替えできます：
+
+```bash
+# 現在の言語を確認
+scripts/cvi-lang
+
+# 言語を変更
+scripts/cvi-lang ja    # 日本語
+scripts/cvi-lang en    # English
+
+# デフォルトに戻す
+scripts/cvi-lang reset
+```
+
+**サポート言語**:
+- **ja**: 日本語（デフォルト）
+- **en**: English
+
+**言語設定の役割**:
+
+`cvi-lang`は**フォールバックメッセージの言語**を設定します：
+- **日本語（ja）**: フォールバックメッセージが「タスクが完了しました」
+- **英語（en）**: フォールバックメッセージが「Task completed」
+
+**注意**: 実際の読み上げ音声は`cvi-voice`で設定します。
+
+---
+
+### 音声の選択
+
+**`cvi-voice`コマンド**で読み上げ音声を選択できます：
+
+```bash
+# 現在の設定を確認
+cvi-voice
+
+# システムデフォルト音声を使用
+cvi-voice system
+
+# 特定の音声を使用
+cvi-voice Samantha   # Samantha（US英語、女性）
+cvi-voice Karen      # Karen（AU英語、女性）
+cvi-voice Daniel     # Daniel（UK英語、男性）
+
+# 利用可能な英語音声を表示
+cvi-voice list
+
+# デフォルトに戻す
+cvi-voice reset
+```
+
+**system オプション**:
+- システムのデフォルト音声を使用（Siri音声など）
+- システム設定で言語別の音声が設定されている場合に便利
+- 設定方法: **システム設定** > **アクセシビリティ** > **読み上げコンテンツ** > **システムの声**
+
+**人気の英語音声**:
+- **Samantha** (US): 標準的でクリアな女性の声（デフォルト）
+- **Karen** (AU): オーストラリア英語、聞き取りやすい女性の声
+- **Daniel** (UK): イギリス英語、男性の声
+- **Moira** (IE): アイルランド英語、女性の声
+
+**使い分けの例**:
+- **英語圏のユーザー**: `cvi-lang en` + `cvi-voice system` でシステムのSiri音声を使用
+- **日本語環境で英語読み上げ**: `cvi-lang en` + `cvi-voice Samantha` など特定の音声を指定
+
+**重要**:
+- `cvi-voice`の設定は英語モード（`cvi-lang en`）の時のみ有効です
+- 日本語モードでは常にシステムデフォルト音声を使用します
+- [VOICE]タグ内のテキストは言語設定に関わらずそのまま読み上げられます
+
+---
+
+### セットアップ診断
+
+**`cvi-check`コマンド**でセットアップ状態を診断できます：
+
+```bash
+scripts/cvi-check
+```
+
+以下の項目をチェック：
+- ✅ Siri音声設定
+- ✅ スクリプト実行権限
+- ✅ hooks設定
+- ✅ 読み上げ速度
+- ✅ 言語設定
+
+問題が見つかった場合、解決方法を案内します。
+
+---
+
 ### 音量調整
 
 `~/.claude/scripts/notify-end.sh`の以下の行を編集：
@@ -145,20 +257,6 @@ afplay -v 0.6 "$TEMP_AUDIO"  # デフォルト: 0.6（60%）
 
 # 通知音の音量を変更（0.0〜1.0）
 afplay -v 1.0 /System/Library/Sounds/Glass.aiff  # デフォルト: 1.0（100%）
-```
-
-### 音声の変更
-
-日本語音声を変更する場合：
-
-```bash
-# Kyoko以外の日本語音声を使用
-say -v Otoya -o "$TEMP_AUDIO" "$MSG"
-```
-
-利用可能な音声を確認：
-```bash
-say -v '?'
 ```
 
 ### 通知音の変更

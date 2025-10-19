@@ -1,6 +1,6 @@
 # CVI ドキュメント索引
 
-**最終更新**: 2025-10-16
+**最終更新**: 2025-10-19
 
 このディレクトリには、CVI (Claude Voice Interuction) の設計・使用方法に関するドキュメントが格納されています。
 
@@ -15,6 +15,7 @@
 | [../README.md](../README.md) | CVIの概要と使い方 | 全員 |
 | [../CLAUDE.md](../CLAUDE.md) | Claude Code向け指示書 | AI開発者 |
 | [voice-features.md](voice-features.md) | 音声機能の詳細ガイド | 開発者・カスタマイズユーザー |
+| [voice-mapping.md](voice-mapping.md) | 音声マッピング機能（言語別音声設定） | カスタマイズユーザー |
 
 ---
 
@@ -29,6 +30,7 @@
 ### カスタマイズする場合
 
 1. **[voice-features.md](voice-features.md)** - [VOICE]タグの使い方、音量調整、音声変更
+2. **[voice-mapping.md](voice-mapping.md)** - 言語別音声設定、自動検出機能
 
 ### Claude Codeで開発する場合
 
@@ -53,6 +55,11 @@
 - **対象**: 開発者、カスタマイズユーザー
 - **含まれる内容**: [VOICE]タグの使い方、技術仕様、カスタマイズ方法
 
+### voice-mapping.md
+- **目的**: 言語別音声設定と自動検出機能を説明する
+- **対象**: カスタマイズユーザー
+- **含まれる内容**: 言語別音声設定、自動検出機能、音声モード、トラブルシューティング
+
 ---
 
 ## 🔄 ドキュメント更新ルール
@@ -62,10 +69,11 @@
 - **README.md**: 使い方が変わった時、FAQが増えた時
 - **CLAUDE.md**: CVIの機能が追加された時、ルールが変更された時
 - **voice-features.md**: [VOICE]タグの仕様変更、カスタマイズ方法の追加時
+- **voice-mapping.md**: 音声設定機能の変更、言語検出機能の更新時
 
 ### 誰が更新するか
 
-- **README.md, CLAUDE.md, voice-features.md**: 必要に応じて手動またはClaude Codeで編集
+- **README.md, CLAUDE.md, voice-features.md, voice-mapping.md**: 必要に応じて手動またはClaude Codeで編集
 
 ---
 

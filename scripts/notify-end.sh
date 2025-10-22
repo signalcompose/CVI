@@ -124,4 +124,10 @@ fi
 # === 完全に独立したバックグラウンド実行 ===
 # 音声再生とクリーンアップを独立したプロセスとして実行
 # スクリプト本体は即座に終了し、Claude Codeをブロックしない
-(afplay -v 0.6 "$TEMP_AUDIO" && rm -f "$TEMP_AUDIO") &
+
+# ロックファイルで音声再生中を示す
+LOCK_FILE="/tmp/cvi_speaking.lock"
+touch "$LOCK_FILE"
+
+# 音声再生 + 一時ファイルとロックファイルの削除
+(afplay -v 0.6 "$TEMP_AUDIO" && rm -f "$TEMP_AUDIO" "$LOCK_FILE") &

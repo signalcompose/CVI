@@ -12,6 +12,13 @@ if [ "$CVI_ENABLED" = "off" ]; then
     exit 0
 fi
 
+# Check if another voice notification is already playing
+LOCK_FILE="/tmp/cvi_speaking.lock"
+if [ -f "$LOCK_FILE" ]; then
+    # Another voice is speaking, skip this notification
+    exit 0
+fi
+
 # Play Glass notification sound
 afplay -v 1.0 /System/Library/Sounds/Glass.aiff &
 

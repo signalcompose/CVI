@@ -27,9 +27,34 @@ Claude Codeのタスク完了時に音声通知を行うシステム
 
 ## インストール
 
-### 簡単セットアップ（推奨）
+### プラグインとしてインストール（推奨）
 
-`cvi-setup`コマンドを使用すると、全ての設定を自動で行います：
+Claude Codeのプラグインシステムを使用してインストールできます：
+
+```bash
+# Claude Codeで以下のコマンドを実行
+/plugin add signalcompose/cvi
+```
+
+これだけで完了です。hooks、コマンド、スキルが自動的に設定されます。
+
+### 初期設定
+
+インストール後、必要に応じて設定を調整：
+
+```bash
+/cvi:speed 200    # 読み上げ速度（デフォルト: 200wpm）
+/cvi:lang ja      # [VOICE]タグ言語（デフォルト: ja）
+/cvi:voice list   # 利用可能な音声を確認
+```
+
+---
+
+### 手動インストール（代替方法）
+
+プラグインを使用せず手動でセットアップする場合：
+
+#### cvi-setupスクリプト
 
 ```bash
 # グローバルインストール（全プロジェクトで有効）
@@ -39,13 +64,7 @@ scripts/cvi-setup global
 scripts/cvi-setup project
 ```
 
-セットアップ内容：
-- スクリプトのコピーと権限設定
-- hooks設定の追加
-- 初期設定（速度、言語）
-- Siri音声設定の確認
-
-### 手動インストール
+#### 完全手動インストール
 
 手動でセットアップする場合：
 
@@ -150,12 +169,12 @@ cvi status   # 現在の設定を表示
 cvi help     # ヘルプを表示
 ```
 
-#### cvi-speed - 読み上げ速度の調整
+#### cvi:speed - 読み上げ速度の調整
 
 ```bash
-cvi-speed           # 現在の速度を確認
-cvi-speed 220       # 速度を220wpmに設定
-cvi-speed reset     # デフォルト（200wpm）に戻す
+cvi:speed           # 現在の速度を確認
+cvi:speed 220       # 速度を220wpmに設定
+cvi:speed reset     # デフォルト（200wpm）に戻す
 ```
 
 推奨速度：
@@ -163,13 +182,13 @@ cvi-speed reset     # デフォルト（200wpm）に戻す
 - 200 wpm: 標準速度（デフォルト）
 - 220 wpm: やや速め、効率的
 
-#### cvi-lang - 言語切り替え
+#### cvi:lang - 言語切り替え
 
 ```bash
-cvi-lang           # 現在の言語を確認
-cvi-lang ja        # 日本語に設定
-cvi-lang en        # 英語に設定
-cvi-lang reset     # デフォルト（ja）に戻す
+cvi:lang           # 現在の言語を確認
+cvi:lang ja        # 日本語に設定
+cvi:lang en        # 英語に設定
+cvi:lang reset     # デフォルト（ja）に戻す
 ```
 
 言語設定の役割：
@@ -177,27 +196,27 @@ cvi-lang reset     # デフォルト（ja）に戻す
 - **英語（en）**: フォールバックメッセージが英語になります
 
 注意:
-- 実際の読み上げ音声は`cvi-voice`で設定します
+- 実際の読み上げ音声は`cvi:voice`で設定します
 - 日本語モードでは常にシステムデフォルト音声を使用
-- 英語モードでは`cvi-voice`で設定した音声を使用
+- 英語モードでは`cvi:voice`で設定した音声を使用
 - [VOICE]タグ内のテキストは言語設定に関わらずそのまま読み上げられます
 
-#### cvi-voice - 音声の選択（言語別設定）
+#### cvi:voice - 音声の選択（言語別設定）
 
 ```bash
-cvi-voice                    # 現在の設定を確認
-cvi-voice en Zoe             # 英語音声をZoeに設定
-cvi-voice ja Kyoko           # 日本語音声をKyokoに設定
-cvi-voice mode auto          # 自動音声選択モード（デフォルト）
-cvi-voice mode fixed         # 固定音声モード
-cvi-voice fixed Zoe          # 全言語でZoeを使用
-cvi-voice list               # 利用可能な音声一覧
-cvi-voice reset              # デフォルトに戻す
+cvi:voice                    # 現在の設定を確認
+cvi:voice en Zoe             # 英語音声をZoeに設定
+cvi:voice ja Kyoko           # 日本語音声をKyokoに設定
+cvi:voice mode auto          # 自動音声選択モード（デフォルト）
+cvi:voice mode fixed         # 固定音声モード
+cvi:voice fixed Zoe          # 全言語でZoeを使用
+cvi:voice list               # 利用可能な音声一覧
+cvi:voice reset              # デフォルトに戻す
 ```
 
 **言語別音声設定**:
-- **英語音声** (`cvi-voice en [VOICE]`): 英語テキスト用の音声
-- **日本語音声** (`cvi-voice ja [VOICE]`): 日本語テキスト用の音声
+- **英語音声** (`cvi:voice en [VOICE]`): 英語テキスト用の音声
+- **日本語音声** (`cvi:voice ja [VOICE]`): 日本語テキスト用の音声
 - 各言語で異なる音声を設定できます
 
 **音声モード**:
@@ -218,13 +237,13 @@ cvi-voice reset              # デフォルトに戻す
 - **Karen** (AU): オーストラリア英語、女性
 - **Daniel** (UK): イギリス英語、男性
 
-#### cvi-auto - 言語自動検出
+#### cvi:auto - 言語自動検出
 
 ```bash
-cvi-auto           # 現在の設定を確認
-cvi-auto on        # 言語自動検出を有効化
-cvi-auto off       # 言語自動検出を無効化（デフォルト）
-cvi-auto status    # 詳細ステータス表示
+cvi:auto           # 現在の設定を確認
+cvi:auto on        # 言語自動検出を有効化
+cvi:auto off       # 言語自動検出を無効化（デフォルト）
+cvi:auto status    # 詳細ステータス表示
 ```
 
 **言語自動検出**:
@@ -236,20 +255,20 @@ cvi-auto status    # 詳細ステータス表示
 **使用例**:
 ```bash
 # 日本語環境で英語学習
-cvi-lang ja            # フォールバックは日本語
-cvi-voice ja system    # 日本語はシステム音声
-cvi-voice en Zoe       # 英語はZoe（学習用）
-cvi-auto on            # 自動検出ON
+cvi:lang ja            # フォールバックは日本語
+cvi:voice ja system    # 日本語はシステム音声
+cvi:voice en Zoe       # 英語はZoe（学習用）
+cvi:auto on            # 自動検出ON
 
 # 動作
 [VOICE]Task completed[/VOICE]  # Zoeで英語読み上げ
 [VOICE]完了しました[/VOICE]      # システム音声で日本語
 ```
 
-#### cvi-check - セットアップ診断
+#### cvi:check - セットアップ診断
 
 ```bash
-cvi-check          # セットアップ状態を診断
+cvi:check          # セットアップ状態を診断
 ```
 
 チェック項目：
@@ -322,7 +341,7 @@ afplay -v 1.0 /System/Library/Sounds/Ping.aiff &
 
 **まず診断コマンドを実行**:
 ```bash
-cvi-check
+cvi:check
 ```
 
 **確認事項**:
@@ -362,14 +381,14 @@ say "テストメッセージです"
 ### Q: 読み上げ速度を変更したい
 
 ```bash
-cvi-speed 220  # 速めに設定
-cvi-speed 180  # ゆっくりに設定
+cvi:speed 220  # 速めに設定
+cvi:speed 180  # ゆっくりに設定
 ```
 
 ### Q: 英語で読み上げたい
 
 ```bash
-cvi-lang en    # 英語に切り替え
+cvi:lang en    # 英語に切り替え
 ```
 
 注意: [VOICE]タグ内のテキストは言語設定に関わらずそのまま読み上げられます。
@@ -382,7 +401,7 @@ cvi-lang en    # 英語に切り替え
 bash ~/.claude/scripts/notify-end.sh < /dev/null
 
 # 診断実行
-cvi-check
+cvi:check
 ```
 
 ---

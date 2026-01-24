@@ -285,48 +285,30 @@ cat ~/.claude/settings.json
 
 ### ブランチ戦略
 
-**Git Flow**を採用
+**GitHub Flow**を採用（シンプルなOSS向けワークフロー）
 
 ```
-main          ← リリースブランチ（本番環境）
-  └── develop ← 開発ブランチ（デフォルト）
-       └── feature/xxx  ← 機能ブランチ
-       └── bugfix/xxx   ← バグ修正ブランチ
-       └── docs/xxx     ← ドキュメント更新ブランチ
+main              ← 本番ブランチ（デフォルト）
+  └── feature/xxx ← 機能ブランチ
+  └── fix/xxx     ← バグ修正ブランチ
+  └── docs/xxx    ← ドキュメント更新ブランチ
+  └── chore/xxx   ← メンテナンスブランチ
 ```
 
-**デフォルトブランチ**: `develop`
+**デフォルトブランチ**: `main`
 
 ### ブランチ保護
 
-- **main/develop への直接プッシュ禁止**
-- **PR必須**（レビュー推奨: 1、管理者バイパス可能）
-- **マージコミット必須**（Squash禁止）
-
-### 🚨 絶対禁止事項
-
-- ❌ **main → develop への逆流**（これが最も重要）
-- ❌ **main・developブランチへの直接コミット**
-- ❌ Squashマージ（Git Flow履歴が破壊される）
-- ❌ ISSUE番号のないブランチ名
-
-### リリースフロー
-
-**STEP 1**: GitHubでISSUE作成（例: `Release v1.0.1`）
-**STEP 2**: developブランチで最終調整・バージョン更新（必要に応じて）
-**STEP 3**: PR作成（`develop` → `main`）  ← **直接PRでOK**
-**STEP 4**: マージ（**マージコミット使用**）
-**STEP 5**: タグ付け（`git tag v1.0.1`）
-
-**重要**: developからmainへの直接PRは**リリース時のみ許可**。
-逆方向（main → develop）は**絶対禁止**。
+- **main への直接プッシュ禁止**（管理者バイパス可能）
+- **PR必須**
+- **マージコミット推奨**
 
 ### 開発フロー
 
 ```bash
-# 1. developブランチから最新を取得
-git checkout develop
-git pull origin develop
+# 1. mainブランチから最新を取得
+git checkout main
+git pull origin main
 
 # 2. 作業ブランチを作成
 git checkout -b feature/your-feature-name
@@ -339,8 +321,16 @@ git commit -m "feat: implement your feature"
 git push -u origin feature/your-feature-name
 
 # 5. Pull Request作成
-gh pr create --base develop --head feature/your-feature-name
+gh pr create --base main --head feature/your-feature-name
+
+# 6. レビュー後マージ → 自動的にmainに反映
 ```
+
+### リリースフロー
+
+1. mainブランチが常に最新のリリース可能な状態
+2. 必要に応じてタグ付け（`git tag v1.0.1`）
+3. claude-toolsへの同期
 
 ---
 
